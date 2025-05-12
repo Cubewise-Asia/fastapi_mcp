@@ -412,6 +412,8 @@ class FastApiMCP:
                 headers["Authorization"] = http_request_info.headers["Authorization"]
             elif "authorization" in http_request_info.headers:
                 headers["Authorization"] = http_request_info.headers["authorization"]
+            elif "x_api_key" in http_request_info.headers:
+                headers["x_api_key"] = http_request_info.headers["x_api_key"]
 
         body = arguments if arguments else None
 
