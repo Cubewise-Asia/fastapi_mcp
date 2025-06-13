@@ -412,13 +412,10 @@ class FastApiMCP:
                 headers["Authorization"] = http_request_info.headers["Authorization"]
             elif "authorization" in http_request_info.headers:
                 headers["Authorization"] = http_request_info.headers["authorization"]
-            elif "x_api_key" in http_request_info.headers:
-                headers["x_api_key"] = http_request_info.headers["x_api_key"]
-                headers['x_is_mcp_request'] = "true"
-            elif "x_app_uid" in http_request_info.headers or "x_app_type" in http_request_info.headers:
-                headers["x_app_uid"] = http_request_info.headers.get("x_app_uid", "")
-                headers["x_app_type"] = http_request_info.headers.get("x_app_type", "")
-                headers['x_is_mcp_request'] = "true"
+            for header_name in http_request_info.headers:
+                if header_name.lower().startswith("x_"):
+                    headers[header_name] = http_request_info.headers[header_name]
+                    headers['x_is_mcp_request'] = "true"
 
         body = arguments if arguments else None
 
