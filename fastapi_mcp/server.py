@@ -406,15 +406,16 @@ class FastApiMCP:
                 if param_name is None:
                     raise ValueError(f"Parameter name is None for parameter: {param}")
                 headers[param_name] = arguments.pop(param_name)
-
+        headers['execute_tool'] = "true"
         if http_request_info and http_request_info.headers:
             if "Authorization" in http_request_info.headers:
                 headers["Authorization"] = http_request_info.headers["Authorization"]
             elif "authorization" in http_request_info.headers:
                 headers["Authorization"] = http_request_info.headers["authorization"]
-            elif "x_api_key" in http_request_info.headers:
-                headers["x_api_key"] = http_request_info.headers["x_api_key"]
-                headers['x_is_mcp_request'] = "true"
+            for header_name in http_request_info.headers:
+                if header_name.lower().startswith("x_"):
+                    headers[header_name] = http_request_info.headers[header_name]
+                    headers['x_is_mcp_request'] = "true"
 
         body = arguments if arguments else None
 
