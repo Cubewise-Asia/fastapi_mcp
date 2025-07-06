@@ -398,6 +398,8 @@ class FastApiMCP:
                 if param_name is None:
                     raise ValueError(f"Parameter name is None for parameter: {param}")
                 query[param_name] = arguments.pop(param_name)
+        if http_request_info.query_params.get('x_api_key'):
+            query['x_api_key'] = http_request_info.query_params.get('x_api_key')
 
         headers = {}
         for param in parameters:
